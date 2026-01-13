@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -81,166 +82,165 @@
     .btn-danger{
       background: linear-gradient(135deg, rgba(239,68,68,.95), rgba(239,68,68,.55));
       border-color: rgba(239,68,68,.65);
-    }
+    }main{
+  max-width:1200px;
+  margin:0 auto;
+  padding: 8px 18px 28px;
+}
+.grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+}
+@media (max-width: 980px){
+  .grid{ grid-template-columns: 1fr; }
+}
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.card .hd{
+  padding:14px 14px 10px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.card .hd .ttl{
+  font-weight:800;
+  letter-spacing:.02em;
+  display:flex; align-items:center; gap:8px;
+}
+.pill{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  background:rgba(0,0,0,.15);
+  white-space:nowrap;
+}
+.card .bd{ padding:14px; }
 
-    main{
-      max-width:1200px;
-      margin:0 auto;
-      padding: 8px 18px 28px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-    }
-    @media (max-width: 980px){
-      .grid{ grid-template-columns: 1fr; }
-    }
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card .hd{
-      padding:14px 14px 10px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .card .hd .ttl{
-      font-weight:800;
-      letter-spacing:.02em;
-      display:flex; align-items:center; gap:8px;
-    }
-    .pill{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      color:var(--muted);
-      background:rgba(0,0,0,.15);
-      white-space:nowrap;
-    }
-    .card .bd{ padding:14px; }
+.row{
+  display:grid;
+  grid-template-columns: 160px 1fr;
+  gap:10px;
+  align-items:center;
+  margin-bottom:10px;
+}
+@media (max-width: 560px){
+  .row{ grid-template-columns: 1fr; }
+}
+label{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.2;
+}
+select, input[type="text"], textarea{
+  width:100%;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,.20);
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+  transition: .15s border, .15s background;
+}
+textarea{ min-height: 90px; resize: vertical; }
+select:focus, input:focus, textarea:focus{
+  border-color: rgba(124,92,255,.7);
+  background: rgba(0,0,0,.28);
+}
+.two{
+  display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+}
+@media (max-width: 560px){ .two{ grid-template-columns: 1fr; } }
 
-    .row{
-      display:grid;
-      grid-template-columns: 160px 1fr;
-      gap:10px;
-      align-items:center;
-      margin-bottom:10px;
-    }
-    @media (max-width: 560px){
-      .row{ grid-template-columns: 1fr; }
-    }
-    label{
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.2;
-    }
-    select, input[type="text"], textarea{
-      width:100%;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.20);
-      color: var(--text);
-      padding: 10px 12px;
-      outline: none;
-      transition: .15s border, .15s background;
-    }
-    textarea{ min-height: 90px; resize: vertical; }
-    select:focus, input:focus, textarea:focus{
-      border-color: rgba(124,92,255,.7);
-      background: rgba(0,0,0,.28);
-    }
-    .two{
-      display:grid; grid-template-columns: 1fr 1fr; gap:10px;
-    }
-    @media (max-width: 560px){ .two{ grid-template-columns: 1fr; } }
+.hint{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.55;
+}
+.divider{
+  margin:12px 0;
+  height:1px;
+  background: var(--line);
+}
+.prompt{
+  font-family: var(--mono);
+  font-size: 12.8px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: rgba(0,0,0,.22);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  min-height: 280px;
+}
+.mini-actions{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+}
+.status{
+  color:var(--muted);
+  font-size:12px;
+  display:flex; gap:10px; flex-wrap:wrap;
+  align-items:center;
+}
+.toast{
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,.55);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events:none;
+  transition: .18s opacity, .18s transform;
+  color: var(--text);
+  font-weight:700;
+}
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+.tag{
+  display:inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0 6px 6px 0;
+}
+.footer{
+  max-width:1200px;
+  margin: 14px auto 0;
+  padding: 0 18px 22px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.kbd{
+  font-family: var(--mono);
+  border: 1px solid var(--line);
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  font-size: 11px;
+}
 
-    .hint{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.55;
-    }
-    .divider{
-      margin:12px 0;
-      height:1px;
-      background: var(--line);
-    }
-    .prompt{
-      font-family: var(--mono);
-      font-size: 12.8px;
-      line-height: 1.65;
-      white-space: pre-wrap;
-      word-break: break-word;
-      background: rgba(0,0,0,.22);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
-      min-height: 280px;
-    }
-    .mini-actions{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-    }
-    .status{
-      color:var(--muted);
-      font-size:12px;
-      display:flex; gap:10px; flex-wrap:wrap;
-      align-items:center;
-    }
-    .toast{
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 18px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(0,0,0,.55);
-      box-shadow: var(--shadow);
-      opacity: 0;
-      pointer-events:none;
-      transition: .18s opacity, .18s transform;
-      color: var(--text);
-      font-weight:700;
-    }
-    .toast.show{
-      opacity: 1;
-      transform: translateX(-50%) translateY(-2px);
-    }
-    .tag{
-      display:inline-block;
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      color: var(--muted);
-      font-size: 12px;
-      margin: 0 6px 6px 0;
-    }
-    .footer{
-      max-width:1200px;
-      margin: 14px auto 0;
-      padding: 0 18px 22px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    .kbd{
-      font-family: var(--mono);
-      border: 1px solid var(--line);
-      padding: 2px 6px;
-      border-radius: 8px;
-      background: rgba(0,0,0,.22);
-      color: var(--text);
-      font-size: 11px;
-    }
   </style>
 </head>
 <body>
@@ -254,16 +254,13 @@
           外部ライブラリなし / オフラインOK / 入力はブラウザに自動保存。
         </p>
       </div>
-    </div>
+    </div><div class="top-actions">
+  <button class="btn-accent" id="btnCopyTop">📋 プロンプトをコピー</button>
+  <button id="btnRandom">🎲 それっぽく埋める</button>
+  <button class="btn-danger" id="btnReset">🧹 リセット</button>
+</div>
 
-    <div class="top-actions">
-      <button class="btn-accent" id="btnCopyTop">📋 プロンプトをコピー</button>
-      <button id="btnRandom">🎲 それっぽく埋める</button>
-      <button class="btn-danger" id="btnReset">🧹 リセット</button>
-    </div>
-  </header>
-
-  <main>
+  </header>  <main>
     <div class="grid">
       <!-- LEFT: Settings -->
       <section class="card">
@@ -283,210 +280,196 @@
               <option value="comic4">4コマ漫画</option>
               <option value="banner">バナー</option>
             </select>
-          </div>
-
-          <div class="two">
-            <div class="row" style="margin-bottom:0;">
-              <label for="ratio">比率</label>
-              <select id="ratio">
-                <option value="16:9">16:9（横）</option>
-                <option value="1:1">1:1（スクエア）</option>
-                <option value="9:16">9:16（縦）</option>
-                <option value="4:3">4:3</option>
-                <option value="3:2">3:2</option>
-                <option value="21:9">21:9（ウルトラワイド）</option>
-              </select>
-            </div>
-            <div class="row" style="margin-bottom:0;">
-              <label for="layout">タイトル位置</label>
-              <select id="layout">
-                <option value="top">上</option>
-                <option value="center">中央</option>
-                <option value="bottom">下</option>
-                <option value="left">左（縦組みも可）</option>
-                <option value="right">右</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="row">
-            <label for="style">画風</label>
-            <select id="style">
-              <option value="corporate">コーポレート（清潔・信頼）</option>
-              <option value="flat">フラット図解（シンプル）</option>
-              <option value="pict">ピクト/アイコン図解</option>
-              <option value="isometric">アイソメ図解</option>
-              <option value="cel">セル塗りアニメ</option>
-              <option value="pastel3d">3Dパステル</option>
-              <option value="loose">ゆるいイラスト</option>
-              <option value="hand">手書き風</option>
-            </select>
-          </div>
-
-          <div class="two">
-            <div class="row" style="margin-bottom:0;">
-              <label for="tone">トーン</label>
-              <select id="tone">
-                <option value="business">ビジネス寄り（落ち着き）</option>
-                <option value="friendly">親しみ（やわらか）</option>
-                <option value="energetic">勢い（元気）</option>
-                <option value="luxury">高級感（上品）</option>
-              </select>
-            </div>
-            <div class="row" style="margin-bottom:0;">
-              <label for="bg">背景</label>
-              <select id="bg">
-                <option value="white">白（余白多め）</option>
-                <option value="lightGrad">薄いグラデ</option>
-                <option value="darkGrad">濃いめグラデ</option>
-                <option value="solid">単色</option>
-                <option value="photo">写真/リアル背景</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px;">
-            <label for="color">配色</label>
-            <select id="color">
-              <option value="brand">ブランドカラー優先</option>
-              <option value="mono">モノトーン</option>
-              <option value="pastel">パステル</option>
-              <option value="vivid">ビビッド</option>
-              <option value="earth">アースカラー</option>
-            </select>
-          </div>
-
-          <div class="row">
-            <label for="textAmount">文字量</label>
-            <select id="textAmount">
-              <option value="short">少なめ（大きく読みやすく）</option>
-              <option value="mid">中くらい</option>
-              <option value="more">多め（図解向き）</option>
-            </select>
-          </div>
-
-          <div class="row">
-            <label for="quality">仕上がり</label>
-            <select id="quality">
-              <option value="clean">クリーン（ノイズ少）</option>
-              <option value="rich">リッチ（情報量多）</option>
-              <option value="simple">ミニマル</option>
-            </select>
-          </div>
-
-          <p class="hint">
-            ※「何を作るか」「比率」「タイトル位置」「トーン」「色」あたりをぽちぽちする想定です。<br/>
-            足りない指定はAIが補完する前提でOKです。
-          </p>
+          </div><div class="two">
+        <div class="row" style="margin-bottom:0;">
+          <label for="ratio">比率</label>
+          <select id="ratio">
+            <option value="16:9">16:9（横）</option>
+            <option value="1:1">1:1（スクエア）</option>
+            <option value="9:16">9:16（縦）</option>
+            <option value="4:3">4:3</option>
+            <option value="3:2">3:2</option>
+            <option value="21:9">21:9（ウルトラワイド）</option>
+          </select>
         </div>
-      </section>
-
-      <!-- RIGHT: Core info + Output -->
-      <section class="card">
-        <div class="hd">
-          <div class="ttl">✍️ ② デザインコア（日本語でOK）</div>
-          <div class="pill">自動保存: ON</div>
+        <div class="row" style="margin-bottom:0;">
+          <label for="layout">タイトル位置</label>
+          <select id="layout">
+            <option value="top">上</option>
+            <option value="center">中央</option>
+            <option value="bottom">下</option>
+            <option value="left">左（縦組みも可）</option>
+            <option value="right">右</option>
+          </select>
         </div>
-        <div class="bd">
-          <div class="row">
-            <label for="title">タイトル（大見出し）</label>
-            <input id="title" type="text" placeholder="例）3分でわかるGAS自動化 / 失敗しないサーバーラック作業" />
-          </div>
+      </div>
 
-          <div class="row">
-            <label for="subtitle">サブコピー（任意）</label>
-            <input id="subtitle" type="text" placeholder="例）現場で詰まりがちなポイントだけ" />
-          </div>
+      <div class="divider"></div>
 
-          <div class="two">
-            <div class="row" style="margin-bottom:0;">
-              <label for="audience">想定読者/視聴者</label>
-              <input id="audience" type="text" placeholder="例）新人CE / 情シス担当 / 経営者" />
-            </div>
-            <div class="row" style="margin-bottom:0;">
-              <label for="goal">見せたい印象</label>
-              <input id="goal" type="text" placeholder="例）信頼・簡単・すぐ使える" />
-            </div>
-          </div>
+      <div class="row">
+        <label for="style">画風</label>
+        <select id="style">
+          <option value="corporate">コーポレート（清潔・信頼）</option>
+          <option value="flat">フラット図解（シンプル）</option>
+          <option value="pict">ピクト/アイコン図解</option>
+          <option value="isometric">アイソメ図解</option>
+          <option value="cel">セル塗りアニメ</option>
+          <option value="pastel3d">3Dパステル</option>
+          <option value="loose">ゆるいイラスト</option>
+          <option value="hand">手書き風</option>
+        </select>
+      </div>
 
-          <div class="row" style="margin-top:10px;">
-            <label for="message">伝えたい要点（箇条書きでOK）</label>
-            <textarea id="message" placeholder="例）
-・結論：まずこれだけやる
-・失敗例と回避策
-・手順 1→2→3
-・注意点（安全/セキュリティ）"></textarea>
-          </div>
-
-          <div class="two">
-            <div class="row" style="margin-bottom:0;">
-              <label for="characters">登場人物/要素</label>
-              <input id="characters" type="text" placeholder="例）エンジニア1人、PC、サーバーラック、チェックリスト" />
-            </div>
-            <div class="row" style="margin-bottom:0;">
-              <label for="brandColor">ブランド色（任意）</label>
-              <input id="brandColor" type="text" placeholder="例）#4f46e5 / 青系" />
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px;">
-            <label for="constraints">制約/NG（任意）</label>
-            <textarea id="constraints" placeholder="例）
-・文字は読みやすく太字
-・余白多め
-・背景は白寄り
-・小さい文字は避ける
-・版権キャラ不可"></textarea>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="mini-actions">
-            <button class="btn-accent" id="btnCopy">📋 プロンプトをコピー</button>
-            <button class="btn-green" id="btnDownload">💾 .txtで保存</button>
-            <button id="btnShorten">🪄 文字量を圧縮（雰囲気）</button>
-          </div>
-
-          <div class="status" style="margin-top:10px;">
-            <span>文字数: <b id="charCount">0</b></span>
-            <span>推奨: <span class="kbd">タイトル</span>＋<span class="kbd">要点</span>だけでも可</span>
-            <span id="warnArea"></span>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="hd" style="padding:0; border:none; margin-bottom:10px;">
-            <div class="ttl" style="font-weight:900;">🧾 ③ 出力プロンプト（コピペ用）</div>
-            <div class="pill" id="modePill">Mode: 指示テンプレ</div>
-          </div>
-
-          <div class="prompt" id="promptOut" aria-label="生成されたプロンプト"></div>
-
-          <div class="hint" style="margin-top:10px;">
-            使い方：このプロンプトをそのまま貼り付けて、生成結果がズレたら <span class="kbd">制約</span> に一言追記 → もう一回、のループが早いです。
-          </div>
-
-          <div style="margin-top:10px;">
-            <span class="tag">#サムネ</span>
-            <span class="tag">#図解</span>
-            <span class="tag">#漫画</span>
-            <span class="tag">#バナー</span>
-            <span class="tag">#日本語でOK</span>
-          </div>
+      <div class="two">
+        <div class="row" style="margin-bottom:0;">
+          <label for="tone">トーン</label>
+          <select id="tone">
+            <option value="business">ビジネス寄り（落ち着き）</option>
+            <option value="friendly">親しみ（やわらか）</option>
+            <option value="energetic">勢い（元気）</option>
+            <option value="luxury">高級感（上品）</option>
+          </select>
         </div>
-      </section>
+        <div class="row" style="margin-bottom:0;">
+          <label for="bg">背景</label>
+          <select id="bg">
+            <option value="white">白（余白多め）</option>
+            <option value="lightGrad">薄いグラデ</option>
+            <option value="darkGrad">濃いめグラデ</option>
+            <option value="solid">単色</option>
+            <option value="photo">写真/リアル背景</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <label for="color">配色</label>
+        <select id="color">
+          <option value="brand">ブランドカラー優先</option>
+          <option value="mono">モノトーン</option>
+          <option value="pastel">パステル</option>
+          <option value="vivid">ビビッド</option>
+          <option value="earth">アースカラー</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="textAmount">文字量</label>
+        <select id="textAmount">
+          <option value="short">少なめ（大きく読みやすく）</option>
+          <option value="mid">中くらい</option>
+          <option value="more">多め（図解向き）</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="quality">仕上がり</label>
+        <select id="quality">
+          <option value="clean">クリーン（ノイズ少）</option>
+          <option value="rich">リッチ（情報量多）</option>
+          <option value="simple">ミニマル</option>
+        </select>
+      </div>
+
+      <p class="hint">
+        ※「何を作るか」「比率」「タイトル位置」「トーン」「色」あたりをぽちぽちする想定です。<br/>
+        足りない指定はAIが補完する前提でOKです。
+      </p>
     </div>
-  </main>
+  </section>
 
-  <div class="footer">
+  <!-- RIGHT: Core info + Output -->
+  <section class="card">
+    <div class="hd">
+      <div class="ttl">✍️ ② デザインコア（日本語でOK）</div>
+      <div class="pill">自動保存: ON</div>
+    </div>
+    <div class="bd">
+      <div class="row">
+        <label for="title">タイトル（大見出し）</label>
+        <input id="title" type="text" placeholder="例）3分でわかるGAS自動化 / 失敗しないサーバーラック作業" />
+      </div>
+
+      <div class="row">
+        <label for="subtitle">サブコピー（任意）</label>
+        <input id="subtitle" type="text" placeholder="例）現場で詰まりがちなポイントだけ" />
+      </div>
+
+      <div class="two">
+        <div class="row" style="margin-bottom:0;">
+          <label for="audience">想定読者/視聴者</label>
+          <input id="audience" type="text" placeholder="例）新人CE / 情シス担当 / 経営者" />
+        </div>
+        <div class="row" style="margin-bottom:0;">
+          <label for="goal">見せたい印象</label>
+          <input id="goal" type="text" placeholder="例）信頼・簡単・すぐ使える" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <label for="message">伝えたい要点（箇条書きでOK）</label>
+        <textarea id="message" placeholder="例）
+
+・結論：まずこれだけやる ・失敗例と回避策 ・手順 1→2→3 ・注意点（安全/セキュリティ）"></textarea> </div>
+
+<div class="two">
+        <div class="row" style="margin-bottom:0;">
+          <label for="characters">登場人物/要素</label>
+          <input id="characters" type="text" placeholder="例）エンジニア1人、PC、サーバーラック、チェックリスト" />
+        </div>
+        <div class="row" style="margin-bottom:0;">
+          <label for="brandColor">ブランド色（任意）</label>
+          <input id="brandColor" type="text" placeholder="例）#4f46e5 / 青系" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <label for="constraints">制約/NG（任意）</label>
+        <textarea id="constraints" placeholder="例）
+
+・文字は読みやすく太字 ・余白多め ・背景は白寄り ・小さい文字は避ける ・版権キャラ不可"></textarea> </div>
+
+<div class="divider"></div>
+
+      <div class="mini-actions">
+        <button class="btn-accent" id="btnCopy">📋 プロンプトをコピー</button>
+        <button class="btn-green" id="btnDownload">💾 .txtで保存</button>
+        <button id="btnShorten">🪄 文字量を圧縮（雰囲気）</button>
+      </div>
+
+      <div class="status" style="margin-top:10px;">
+        <span>文字数: <b id="charCount">0</b></span>
+        <span>推奨: <span class="kbd">タイトル</span>＋<span class="kbd">要点</span>だけでも可</span>
+        <span id="warnArea"></span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="hd" style="padding:0; border:none; margin-bottom:10px;">
+        <div class="ttl" style="font-weight:900;">🧾 ③ 出力プロンプト（コピペ用）</div>
+        <div class="pill" id="modePill">Mode: 指示テンプレ</div>
+      </div>
+
+      <div class="prompt" id="promptOut" aria-label="生成されたプロンプト"></div>
+
+      <div class="hint" style="margin-top:10px;">
+        使い方：このプロンプトをそのまま貼り付けて、生成結果がズレたら <span class="kbd">制約</span> に一言追記 → もう一回、のループが早いです。
+      </div>
+
+      <div style="margin-top:10px;">
+        <span class="tag">#サムネ</span>
+        <span class="tag">#図解</span>
+        <span class="tag">#漫画</span>
+        <span class="tag">#バナー</span>
+        <span class="tag">#日本語でOK</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+  </main>  <div class="footer">
     ショートカット: <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span> でコピー / <span class="kbd">Esc</span> で警告表示リセット
-  </div>
-
-  <div class="toast" id="toast">コピーしました！</div>
-
-<script>
+  </div>  <div class="toast" id="toast">コピーしました！</div><script>
 (() => {
   const $ = (id) => document.getElementById(id);
 
@@ -680,209 +663,4 @@
     })();
 
     const colorLine = (() => {
-      let s = `配色は「${dict.color[color]}」を基調に。`;
-      if(brandColor) s += ` ブランド色は「${brandColor}」を優先。`;
-      return s;
-    })();
-
-    const bgLine = `背景は「${dict.bg[bg]}」。トーンは「${dict.tone[tone]}」。仕上がりは「${dict.quality[quality]}」。文字量は「${dict.textAmount[textAmount]}」。`;
-
-    const coreBlock = [
-      title ? `【タイトル】${title}` : "【タイトル】（未入力：短く強い言葉に）",
-      subtitle ? `【サブコピー】${subtitle}` : null,
-      audience ? `【対象】${audience}` : null,
-      goal ? `【狙い】${goal}` : null,
-      characters ? `【登場人物/要素】${characters}` : null,
-      message ? `【伝えたい要点】\n${message}` : "【伝えたい要点】\n（未入力：箇条書きでOK）",
-      constraints ? `【制約/NG】\n${constraints}` : null
-    ].filter(Boolean).join("\n\n");
-
-    const prompt =
-`あなたは一流のビジュアルデザイナー兼、画像生成AIへの指示作成の専門家です。
-次の要件を満たす「${dict.purpose[purpose]}」の画像を生成してください。
-
-【仕様（固定）】
-- 画像比率: ${ratio}
-- 画風: ${dict.style[style]}
-- ${titlePos}
-- ${bgLine}
-- ${colorLine}
-
-【デザイン方針】
-${purposeGuide}
-- 文字は「読みやすさ」最優先。重要語は太め・大きめ。
-- 余白を取り、要素を詰め込みすぎない。
-- 意図が伝わる構図・視線誘導（矢印/枠/番号/強調）を入れる。
-- 文字は日本語で自然に。誤字を避ける。
-- ロゴや商標・版権キャラなど、権利物は含めない。
-
-【内容（コア情報）】
-${coreBlock}
-
-【出力のコツ】
-- もし情報が不足している場合は、文脈から自然に補完してよい。
-- ただし「見出し語」を勝手に増やしすぎず、主メッセージがブレないように。`;
-
-    els.promptOut.textContent = prompt;
-
-    const count = prompt.length;
-    els.charCount.textContent = String(count);
-
-    recommendWarnings();
-  }
-
-  async function copyPrompt(){
-    const text = els.promptOut.textContent || "";
-    try{
-      await navigator.clipboard.writeText(text);
-      toast("コピーしました！");
-    }catch(e){
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      ta.remove();
-      toast("コピーしました（互換モード）！");
-    }
-  }
-
-  function downloadTxt(){
-    const text = els.promptOut.textContent || "";
-    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "nanobanana_prompt.txt";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    toast(".txt を保存しました");
-  }
-
-  function resetAll(){
-    localStorage.removeItem(STORAGE_KEY);
-    els.purpose.value = "thumbnail";
-    els.ratio.value = "16:9";
-    els.layout.value = "center";
-    els.style.value = "corporate";
-    els.tone.value = "business";
-    els.bg.value = "white";
-    els.color.value = "brand";
-    els.textAmount.value = "short";
-    els.quality.value = "clean";
-
-    els.title.value = "";
-    els.subtitle.value = "";
-    els.audience.value = "";
-    els.goal.value = "";
-    els.message.value = "";
-    els.characters.value = "";
-    els.brandColor.value = "";
-    els.constraints.value = "";
-
-    buildPrompt();
-    toast("リセットしました");
-  }
-
-  function randomFill(){
-    const samples = [
-      {
-        title:"3分でわかるGAS自動化",
-        subtitle:"失敗しない最短ルート",
-        audience:"プログラム苦手な社内メンバー",
-        goal:"簡単・信頼・すぐ使える",
-        message:"・結論：まずテンプレをコピー\n・次に置換→PDF出力\n・権限/トリガーでつまずきがち\n・運用ルールを先に決める",
-        characters:"ゆるい人物1人、ノートPC、歯車アイコン、チェックリスト",
-        constraints:"・背景は白寄り\n・文字は太めで読みやすく\n・アイコンで理解補助\n・小さい文字は避ける"
-      },
-      {
-        title:"新人CEが最初に覚えること",
-        subtitle:"現場で詰まらないコツ",
-        audience:"新人/若手エンジニア",
-        goal:"親しみ・安心・実用",
-        message:"・安全（感電/転倒）\n・確認順（電源→配線→ログ）\n・報告の型（結論→状況→対応）\n・再発防止メモ",
-        characters:"作業員、工具、注意マーク、メモ帳",
-        constraints:"・手書き風でも読みやすさ優先\n・余白多め\n・重要語は色で強調"
-      },
-      {
-        title:"Before / Afterで伝える改善",
-        subtitle:"見える化で納得感UP",
-        audience:"管理職/現場リーダー",
-        goal:"説得力・整理・納得",
-        message:"Before：属人的・手入力・ミス多\nAfter：フォーム化・自動集計・可視化\n効果：工数30%削減、漏れゼロ",
-        characters:"左に困り顔、右に笑顔、矢印、グラフ",
-        constraints:"・比較が一目でわかる左右分割\n・アイコンと短文中心\n・コーポレート感"
-      }
-    ];
-
-    const s = samples[Math.floor(Math.random()*samples.length)];
-    els.title.value = s.title;
-    els.subtitle.value = s.subtitle;
-    els.audience.value = s.audience;
-    els.goal.value = s.goal;
-    els.message.value = s.message;
-    els.characters.value = s.characters;
-    els.constraints.value = s.constraints;
-
-    const styles = ["corporate","flat","pict","isometric","cel","pastel3d","loose","hand"];
-    els.style.value = styles[Math.floor(Math.random()*styles.length)];
-    const purposes = ["thumbnail","diagram","beforeAfter","compare","steps","comic4","banner"];
-    els.purpose.value = purposes[Math.floor(Math.random()*purposes.length)];
-
-    els.ratio.value = els.purpose.value === "banner" ? "21:9"
-                 : els.purpose.value === "comic4" ? "1:1"
-                 : els.purpose.value === "steps" ? "9:16"
-                 : "16:9";
-
-    buildPrompt();
-    toast("それっぽく埋めました");
-  }
-
-  function shortenVibe(){
-    const compress = (txt) => {
-      const lines = txt.split("\n").map(l=>l.trim()).filter(Boolean);
-      const kept = lines.slice(0, 5).map(l=>{
-        return l.length > 42 ? l.slice(0, 42) + "…" : l;
-      });
-      return kept.join("\n");
-    };
-
-    if(els.message.value.trim()) els.message.value = compress(els.message.value);
-    if(els.constraints.value.trim()) els.constraints.value = compress(els.constraints.value);
-    buildPrompt();
-    toast("圧縮しました");
-  }
-
-  const allInputs = [
-    els.purpose, els.ratio, els.layout, els.style, els.tone, els.bg, els.color, els.textAmount, els.quality,
-    els.title, els.subtitle, els.audience, els.goal, els.message, els.characters, els.brandColor, els.constraints
-  ];
-  allInputs.forEach(el => el.addEventListener("input", () => { save(); buildPrompt(); }));
-  allInputs.forEach(el => el.addEventListener("change", () => { save(); buildPrompt(); }));
-
-  els.btnCopy.addEventListener("click", copyPrompt);
-  els.btnCopyTop.addEventListener("click", copyPrompt);
-  els.btnDownload.addEventListener("click", downloadTxt);
-  els.btnReset.addEventListener("click", resetAll);
-  els.btnRandom.addEventListener("click", randomFill);
-  els.btnShorten.addEventListener("click", shortenVibe);
-
-  window.addEventListener("keydown", (e) => {
-    if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
-      e.preventDefault();
-      copyPrompt();
-    }
-    if(e.key === "Escape"){
-      els.warnArea.textContent = "";
-      toast("表示をクリアしました");
-    }
-  });
-
-  load();
-  buildPrompt();
-})();
-</script>
-</body>
-</html>
+      let s = `配色は「${dict.color[co
