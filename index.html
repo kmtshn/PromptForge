@@ -1,0 +1,1648 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PromptForge - AI画像生成プロンプトジェネレーター</title>
+  <style>
+    :root {
+      --bg-start: #fef9ff;
+      --bg-mid: #f5f0ff;
+      --bg-end: #fff5f5;
+      --card: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(255, 255, 255, 0.6);
+      --card-shadow: 0 8px 32px rgba(147, 112, 219, 0.15);
+      --text: #2d2d3a;
+      --text-muted: #6b6b80;
+      --accent-primary: #8b5cf6;
+      --accent-secondary: #ec4899;
+      --accent-tertiary: #f97316;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --gradient-primary: linear-gradient(135deg, #8b5cf6, #ec4899);
+      --gradient-secondary: linear-gradient(135deg, #ec4899, #f97316);
+      --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+      --input-bg: rgba(255, 255, 255, 0.9);
+      --input-border: rgba(139, 92, 246, 0.2);
+      --input-focus: rgba(139, 92, 246, 0.5);
+      --line: rgba(139, 92, 246, 0.15);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
+    }
+
+    .dark-mode {
+      --bg-start: #0f0a1a;
+      --bg-mid: #1a1025;
+      --bg-end: #150d1a;
+      --card: rgba(30, 20, 45, 0.9);
+      --card-border: rgba(139, 92, 246, 0.2);
+      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --text: #f0e6ff;
+      --text-muted: #a89cc4;
+      --input-bg: rgba(20, 15, 35, 0.9);
+      --input-border: rgba(139, 92, 246, 0.3);
+      --line: rgba(139, 92, 246, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--sans);
+      background: 
+        radial-gradient(ellipse 120% 80% at 10% 20%, rgba(139, 92, 246, 0.15), transparent 50%),
+        radial-gradient(ellipse 100% 60% at 90% 10%, rgba(236, 72, 153, 0.12), transparent 50%),
+        radial-gradient(ellipse 80% 50% at 50% 90%, rgba(249, 115, 22, 0.1), transparent 50%),
+        linear-gradient(180deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+      min-height: 100vh;
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Header */
+    header {
+      padding: 24px 24px 16px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--gradient-primary);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      box-shadow: 
+        0 4px 20px rgba(139, 92, 246, 0.4),
+        0 0 40px rgba(139, 92, 246, 0.2);
+      animation: glow 3s ease-in-out infinite alternate;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: var(--gradient-secondary);
+      border-radius: 18px;
+      z-index: -1;
+      animation: rotate 4s linear infinite;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2); }
+      100% { box-shadow: 0 4px 30px rgba(236, 72, 153, 0.5), 0 0 60px rgba(236, 72, 153, 0.3); }
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .brand-text h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text .tagline {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Buttons */
+    button, .btn {
+      border: 1px solid var(--input-border);
+      background: var(--card);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+    }
+
+    button:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      border: none;
+      color: white;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 24px rgba(139, 92, 246, 0.4);
+      filter: brightness(1.1);
+    }
+
+    .btn-success {
+      background: var(--gradient-success);
+      border: none;
+      color: white;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--accent-danger), #f87171);
+      border: none;
+      color: white;
+    }
+
+    .btn-icon {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* Main Layout */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+    }
+
+    .card-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(236, 72, 153, 0.05));
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title .step {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+    }
+
+    .card-body { padding: 20px; }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    label .icon {
+      font-size: 16px;
+    }
+
+    select, input[type="text"], input[type="range"], textarea {
+      width: 100%;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text);
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    select:focus, input[type="text"]:focus, textarea:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+    }
+
+    textarea { 
+      min-height: 100px; 
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b80' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    /* Range Slider */
+    .range-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--line);
+      border: none;
+      padding: 0;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+    }
+
+    .range-value {
+      min-width: 36px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--accent-primary);
+    }
+
+    /* Pills & Tags */
+    .pill {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--accent-primary);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: var(--card);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 0 8px 8px 0;
+    }
+
+    .tag:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .tag.active {
+      border-color: var(--accent-primary);
+      background: var(--gradient-primary);
+      color: white;
+    }
+
+    /* Quick Presets */
+    .preset-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .preset-btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-btn:hover {
+      border-color: var(--accent-secondary);
+      color: var(--accent-secondary);
+      transform: translateY(-1px);
+    }
+
+    .preset-btn.active {
+      background: var(--gradient-secondary);
+      border-color: transparent;
+      color: white;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+      margin: 20px 0;
+    }
+
+    /* Prompt Output */
+    .prompt-output {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(236, 72, 153, 0.05));
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      min-height: 300px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: rgba(139, 92, 246, 0.05);
+      border-radius: var(--radius-sm);
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .status-item strong {
+      color: var(--text);
+    }
+
+    .status-ok { color: var(--accent-success); }
+    .status-warn { color: var(--accent-warning); }
+
+    /* Actions Bar */
+    .actions-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    /* Hint Text */
+    .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: rgba(139, 92, 246, 0.05);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--accent-primary);
+    }
+
+    /* History Panel */
+    .history-panel {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+    }
+
+    .dark-mode .history-panel {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .history-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      padding: 10px 12px;
+      background: var(--card);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-item:hover {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .history-item-title {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .history-item-meta {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      bottom: 24px;
+      padding: 14px 24px;
+      border-radius: var(--radius);
+      background: var(--gradient-primary);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 24px 32px;
+      color: var(--text-muted);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .kbd {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    /* Section Headers */
+    .section-header {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      position: relative;
+      width: 60px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--line);
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      transition: background 0.3s;
+    }
+
+    .theme-toggle::after {
+      content: '☀️';
+      position: absolute;
+      left: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .dark-mode .theme-toggle {
+      background: var(--accent-primary);
+    }
+
+    .dark-mode .theme-toggle::after {
+      content: '🌙';
+      left: calc(100% - 28px);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true">⚡</div>
+      <div class="brand-text">
+        <h1>PromptForge</h1>
+        <p class="tagline">
+          AI画像生成のための最強プロンプトビルダー<br/>
+          選ぶ → 書く → コピペで完成！
+        </p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-primary" id="btnCopyTop">
+        <span>📋</span> プロンプトをコピー
+      </button>
+      <button id="btnRandom">
+        <span>🎲</span> サンプルで埋める
+      </button>
+      <button class="btn-danger" id="btnReset">
+        <span>🗑️</span> リセット
+      </button>
+      <button class="theme-toggle" id="themeToggle" title="テーマ切り替え"></button>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <!-- LEFT: Settings -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="step">1</span>
+            基本設定
+          </div>
+          <div class="pill" id="presetPill">サムネイル</div>
+        </div>
+        <div class="card-body">
+          <!-- Quick Presets -->
+          <div class="section-header">
+            <span>⚡</span> クイックプリセット
+          </div>
+          <div class="preset-grid">
+            <button class="preset-btn active" data-preset="thumbnail">🎬 サムネ</button>
+            <button class="preset-btn" data-preset="diagram">📊 図解</button>
+            <button class="preset-btn" data-preset="compare">⚖️ 比較</button>
+            <button class="preset-btn" data-preset="steps">📝 手順</button>
+            <button class="preset-btn" data-preset="comic4">💬 4コマ</button>
+            <button class="preset-btn" data-preset="banner">🏷️ バナー</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section-header">
+            <span>🎯</span> 出力設定
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label><span class="icon">🤖</span> 対象モデル</label>
+              <select id="model">
+                <option value="general">汎用（どのAIでも）</option>
+                <option value="dalle3">DALL-E 3</option>
+                <option value="midjourney">Midjourney</option>
+                <option value="sdxl">Stable Diffusion XL</option>
+                <option value="firefly">Adobe Firefly</option>
+                <option value="ideogram">Ideogram</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span class="icon">🌐</span> 出力言語</label>
+              <select id="language">
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+                <option value="both">両方（併記）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">🎨</span> 作成するもの</label>
+            <select id="purpose">
+              <option value="thumbnail">サムネイル（YouTube/ブログ）</option>
+              <option value="diagram">図解（1枚で要点を伝える）</option>
+              <option value="compare">比較図解（A vs B）</option>
+              <option value="beforeAfter">Before / After</option>
+              <option value="steps">ステップ図解（手順説明）</option>
+              <option value="comic4">4コマ漫画</option>
+              <option value="banner">バナー広告</option>
+              <option value="icon">アイコン/ロゴ</option>
+              <option value="infographic">インフォグラフィック</option>
+            </select>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label><span class="icon">📐</span> アスペクト比</label>
+              <select id="ratio">
+                <option value="16:9">16:9（横長）</option>
+                <option value="1:1">1:1（正方形）</option>
+                <option value="9:16">9:16（縦長）</option>
+                <option value="4:3">4:3</option>
+                <option value="3:2">3:2</option>
+                <option value="21:9">21:9（ウルトラワイド）</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span class="icon">📍</span> タイトル位置</label>
+              <select id="layout">
+                <option value="top">上部</option>
+                <option value="center">中央（目立たせる）</option>
+                <option value="bottom">下部</option>
+                <option value="left">左側（縦書き可）</option>
+                <option value="right">右側</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section-header">
+            <span>🖼️</span> ビジュアルスタイル
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">✨</span> 画風</label>
+            <select id="style">
+              <option value="corporate">コーポレート（清潔・信頼感）</option>
+              <option value="flat">フラットデザイン（シンプル）</option>
+              <option value="pict">ピクトグラム/アイコン調</option>
+              <option value="isometric">アイソメトリック</option>
+              <option value="cel">セル塗りアニメ調</option>
+              <option value="pastel3d">3Dパステル（かわいい）</option>
+              <option value="loose">ゆるかわイラスト</option>
+              <option value="hand">手書き風</option>
+              <option value="photo">フォトリアリスティック</option>
+              <option value="watercolor">水彩画風</option>
+              <option value="neon">ネオン/サイバー</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">💪</span> スタイル強度</label>
+            <div class="range-wrapper">
+              <input type="range" id="styleStrength" min="1" max="10" value="7">
+              <span class="range-value" id="styleStrengthValue">7</span>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label><span class="icon">🎭</span> トーン</label>
+              <select id="tone">
+                <option value="business">ビジネス（落ち着き）</option>
+                <option value="friendly">フレンドリー（親しみ）</option>
+                <option value="energetic">エネルギッシュ（元気）</option>
+                <option value="luxury">ラグジュアリー（高級感）</option>
+                <option value="playful">ポップ（楽しい）</option>
+                <option value="minimal">ミニマル（洗練）</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span class="icon">🖼️</span> 背景</label>
+              <select id="bg">
+                <option value="white">白（余白重視）</option>
+                <option value="lightGrad">淡いグラデーション</option>
+                <option value="darkGrad">ダークグラデーション</option>
+                <option value="solid">単色</option>
+                <option value="photo">写真/風景</option>
+                <option value="pattern">パターン/テクスチャ</option>
+                <option value="transparent">透過（PNG用）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label><span class="icon">🎨</span> 配色</label>
+              <select id="color">
+                <option value="brand">ブランドカラー優先</option>
+                <option value="mono">モノトーン</option>
+                <option value="pastel">パステルカラー</option>
+                <option value="vivid">ビビッドカラー</option>
+                <option value="earth">アースカラー</option>
+                <option value="gradient">グラデーション</option>
+                <option value="duotone">デュオトーン</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span class="icon">📝</span> 文字量</label>
+              <select id="textAmount">
+                <option value="short">少なめ（大きく読みやすく）</option>
+                <option value="mid">中程度</option>
+                <option value="more">多め（図解向き）</option>
+                <option value="none">文字なし</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">✨</span> 仕上がり</label>
+            <select id="quality">
+              <option value="clean">クリーン（ノイズ少）</option>
+              <option value="rich">リッチ（ディテール多）</option>
+              <option value="simple">シンプル（ミニマル）</option>
+              <option value="detailed">超高精細</option>
+            </select>
+          </div>
+
+          <div class="hint">
+            💡 設定に迷ったら、プリセットを選んでから微調整するのがおすすめです。
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Content Input + Output -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="step">2</span>
+            コンテンツ入力
+          </div>
+          <div class="pill">💾 自動保存ON</div>
+        </div>
+        <div class="card-body">
+          <div class="section-header">
+            <span>💬</span> メインコンテンツ
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">📌</span> タイトル（大見出し）</label>
+            <input id="title" type="text" placeholder="例）3分でわかるGAS自動化 / 失敗しないサーバー構築" />
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">💭</span> サブコピー（任意）</label>
+            <input id="subtitle" type="text" placeholder="例）初心者でも今日から使える！" />
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label><span class="icon">👥</span> ターゲット</label>
+              <input id="audience" type="text" placeholder="例）新人エンジニア / 経営者" />
+            </div>
+            <div class="form-group">
+              <label><span class="icon">🎯</span> 与えたい印象</label>
+              <input id="goal" type="text" placeholder="例）信頼感 / 簡単そう / 専門的" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">📋</span> 伝えたい要点（箇条書きOK）</label>
+            <textarea id="message" placeholder="例）
+・結論：まずこれだけやればOK
+・よくある失敗パターンと対策
+・ステップ1→2→3の流れ
+・最後に注意点をまとめ"></textarea>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section-header">
+            <span>🎨</span> ビジュアル要素
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label><span class="icon">👤</span> 登場人物/要素</label>
+              <input id="characters" type="text" placeholder="例）エンジニア、PC、チェックリスト" />
+            </div>
+            <div class="form-group">
+              <label><span class="icon">🎨</span> ブランドカラー</label>
+              <input id="brandColor" type="text" placeholder="例）#8B5CF6 / 紫系" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">⚠️</span> 制約・NG事項</label>
+            <textarea id="constraints" placeholder="例）
+・文字は必ず読めるサイズで
+・余白を十分に確保
+・版権キャラクターは使用不可
+・暗い色は避ける"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">🚫</span> ネガティブプロンプト（避けたい要素）</label>
+            <input id="negative" type="text" placeholder="例）ぼやけ、低品質、文字化け、手の変形" />
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Output Section -->
+          <div class="section-header">
+            <span class="step" style="background: var(--gradient-success);">3</span>
+            <span style="margin-left: 4px;">生成されたプロンプト</span>
+            <div class="pill" id="modePill" style="margin-left: auto;">汎用モード</div>
+          </div>
+
+          <div class="prompt-output" id="promptOut" aria-label="生成されたプロンプト"></div>
+
+          <div class="status-bar">
+            <div class="status-item">
+              📊 文字数: <strong id="charCount">0</strong>
+            </div>
+            <div class="status-item">
+              🎯 モデル: <strong id="modelDisplay">汎用</strong>
+            </div>
+            <div class="status-item" id="warnArea">
+              ✅ 入力OK
+            </div>
+          </div>
+
+          <div class="actions-bar">
+            <button class="btn-primary" id="btnCopy">
+              <span>📋</span> コピー
+            </button>
+            <button class="btn-success" id="btnDownload">
+              <span>💾</span> .txtで保存
+            </button>
+            <button id="btnShorten">
+              <span>✂️</span> 圧縮
+            </button>
+            <button id="btnAddHistory">
+              <span>📚</span> 履歴に追加
+            </button>
+          </div>
+
+          <!-- History Panel -->
+          <div class="history-panel">
+            <div class="history-title">
+              <span>📚</span> 最近のプロンプト
+            </div>
+            <div class="history-list" id="historyList">
+              <div class="history-item" style="color: var(--text-muted); justify-content: center;">
+                まだ履歴がありません
+              </div>
+            </div>
+          </div>
+
+          <div class="hint">
+            🚀 <strong>使い方：</strong>プロンプトをそのまま画像生成AIに貼り付け。結果がイメージと違ったら「制約」に追記して再生成を繰り返すのが近道です！
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>
+      ⌨️ ショートカット: 
+      <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span> でコピー / 
+      <span class="kbd">Esc</span> で警告クリア
+    </div>
+    <div>
+      Made with ⚡ by PromptForge
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">コピーしました！</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  const els = {
+    model: $("model"),
+    language: $("language"),
+    purpose: $("purpose"),
+    ratio: $("ratio"),
+    layout: $("layout"),
+    style: $("style"),
+    styleStrength: $("styleStrength"),
+    styleStrengthValue: $("styleStrengthValue"),
+    tone: $("tone"),
+    bg: $("bg"),
+    color: $("color"),
+    textAmount: $("textAmount"),
+    quality: $("quality"),
+
+    title: $("title"),
+    subtitle: $("subtitle"),
+    audience: $("audience"),
+    goal: $("goal"),
+    message: $("message"),
+    characters: $("characters"),
+    brandColor: $("brandColor"),
+    constraints: $("constraints"),
+    negative: $("negative"),
+
+    presetPill: $("presetPill"),
+    modePill: $("modePill"),
+    modelDisplay: $("modelDisplay"),
+    promptOut: $("promptOut"),
+    charCount: $("charCount"),
+    warnArea: $("warnArea"),
+    toast: $("toast"),
+    historyList: $("historyList"),
+
+    btnCopy: $("btnCopy"),
+    btnCopyTop: $("btnCopyTop"),
+    btnReset: $("btnReset"),
+    btnRandom: $("btnRandom"),
+    btnDownload: $("btnDownload"),
+    btnShorten: $("btnShorten"),
+    btnAddHistory: $("btnAddHistory"),
+    themeToggle: $("themeToggle"),
+  };
+
+  const STORAGE_KEY = "promptforge_data_v1";
+  const HISTORY_KEY = "promptforge_history_v1";
+
+  const dict = {
+    purpose: {
+      thumbnail: "サムネイル",
+      diagram: "図解",
+      compare: "比較図解",
+      beforeAfter: "Before/After",
+      steps: "ステップ図解",
+      comic4: "4コマ漫画",
+      banner: "バナー",
+      icon: "アイコン/ロゴ",
+      infographic: "インフォグラフィック",
+    },
+    model: {
+      general: "汎用",
+      dalle3: "DALL-E 3",
+      midjourney: "Midjourney",
+      sdxl: "Stable Diffusion XL",
+      firefly: "Adobe Firefly",
+      ideogram: "Ideogram",
+    },
+    layout: { top:"上部", center:"中央", bottom:"下部", left:"左", right:"右" },
+    tone: { business:"ビジネス", friendly:"フレンドリー", energetic:"エネルギッシュ", luxury:"ラグジュアリー", playful:"ポップ", minimal:"ミニマル" },
+    bg: { white:"白", lightGrad:"淡いグラデ", darkGrad:"ダークグラデ", solid:"単色", photo:"写真", pattern:"パターン", transparent:"透過" },
+    color: { brand:"ブランドカラー", mono:"モノトーン", pastel:"パステル", vivid:"ビビッド", earth:"アース", gradient:"グラデーション", duotone:"デュオトーン" },
+    textAmount: { short:"少なめ", mid:"中程度", more:"多め", none:"なし" },
+    quality: { clean:"クリーン", rich:"リッチ", simple:"シンプル", detailed:"超高精細" },
+    style: {
+      corporate:"コーポレート",
+      flat:"フラットデザイン",
+      pict:"ピクトグラム",
+      isometric:"アイソメトリック",
+      cel:"セル塗りアニメ",
+      pastel3d:"3Dパステル",
+      loose:"ゆるかわ",
+      hand:"手書き風",
+      photo:"フォトリアリスティック",
+      watercolor:"水彩画風",
+      neon:"ネオン/サイバー",
+    }
+  };
+
+  let history = [];
+
+  function toast(msg) {
+    els.toast.textContent = msg;
+    els.toast.classList.add("show");
+    setTimeout(() => els.toast.classList.remove("show"), 1500);
+  }
+
+  function save() {
+    const data = {};
+    const keys = ['model', 'language', 'purpose', 'ratio', 'layout', 'style', 'styleStrength', 'tone', 'bg', 'color', 'textAmount', 'quality', 'title', 'subtitle', 'audience', 'goal', 'message', 'characters', 'brandColor', 'constraints', 'negative'];
+    keys.forEach(k => {
+      if (els[k] && ("value" in els[k])) data[k] = els[k].value;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function load() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      for (const [k, v] of Object.entries(data)) {
+        if (els[k] && ("value" in els[k])) els[k].value = v;
+      }
+      if (data.styleStrength) {
+        els.styleStrengthValue.textContent = data.styleStrength;
+      }
+    } catch(e) {}
+  }
+
+  function loadHistory() {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (raw) {
+      try {
+        history = JSON.parse(raw);
+        renderHistory();
+      } catch(e) {}
+    }
+  }
+
+  function saveHistory() {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 10)));
+  }
+
+  function renderHistory() {
+    if (history.length === 0) {
+      els.historyList.innerHTML = '<div class="history-item" style="color: var(--text-muted); justify-content: center;">まだ履歴がありません</div>';
+      return;
+    }
+    els.historyList.innerHTML = history.map((item, i) => `
+      <div class="history-item" data-index="${i}">
+        <span class="history-item-title">${item.title || '無題'}</span>
+        <span class="history-item-meta">${item.purpose} • ${item.date}</span>
+      </div>
+    `).join('');
+
+    els.historyList.querySelectorAll('.history-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.dataset.index);
+        loadFromHistory(idx);
+      });
+    });
+  }
+
+  function loadFromHistory(idx) {
+    const item = history[idx];
+    if (!item) return;
+    Object.keys(item.data || {}).forEach(k => {
+      if (els[k] && ("value" in els[k])) els[k].value = item.data[k];
+    });
+    if (item.data.styleStrength) {
+      els.styleStrengthValue.textContent = item.data.styleStrength;
+    }
+    buildPrompt();
+    toast("履歴から読み込みました");
+  }
+
+  function addToHistory() {
+    const data = {};
+    const keys = ['model', 'language', 'purpose', 'ratio', 'layout', 'style', 'styleStrength', 'tone', 'bg', 'color', 'textAmount', 'quality', 'title', 'subtitle', 'audience', 'goal', 'message', 'characters', 'brandColor', 'constraints', 'negative'];
+    keys.forEach(k => {
+      if (els[k] && ("value" in els[k])) data[k] = els[k].value;
+    });
+
+    const now = new Date();
+    const dateStr = `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+    
+    history.unshift({
+      title: els.title.value.trim() || '無題',
+      purpose: dict.purpose[els.purpose.value] || els.purpose.value,
+      date: dateStr,
+      data: data
+    });
+
+    if (history.length > 10) history = history.slice(0, 10);
+    saveHistory();
+    renderHistory();
+    toast("履歴に追加しました");
+  }
+
+  function recommendWarnings() {
+    const t = els.title.value.trim();
+    const m = els.message.value.trim();
+    const p = els.purpose.value;
+
+    let warns = [];
+    if (!t) warns.push("タイトル未入力");
+    if (!m) warns.push("要点未入力");
+    if (p === "comic4" && !els.characters.value.trim()) warns.push("4コマは登場人物推奨");
+    if ((p === "compare" || p === "beforeAfter") && m.split("\n").filter(Boolean).length < 2) warns.push("比較系は2項目以上推奨");
+
+    if (warns.length) {
+      els.warnArea.innerHTML = `⚠️ ${warns.join(" / ")}`;
+      els.warnArea.classList.add("status-warn");
+      els.warnArea.classList.remove("status-ok");
+    } else {
+      els.warnArea.textContent = "✅ 入力OK";
+      els.warnArea.classList.add("status-ok");
+      els.warnArea.classList.remove("status-warn");
+    }
+  }
+
+  function buildPrompt() {
+    const model = els.model.value;
+    const language = els.language.value;
+    const purpose = els.purpose.value;
+    const ratio = els.ratio.value;
+    const layout = els.layout.value;
+    const style = els.style.value;
+    const styleStrength = els.styleStrength.value;
+    const tone = els.tone.value;
+    const bg = els.bg.value;
+    const color = els.color.value;
+    const textAmount = els.textAmount.value;
+    const quality = els.quality.value;
+
+    const title = els.title.value.trim();
+    const subtitle = els.subtitle.value.trim();
+    const audience = els.audience.value.trim();
+    const goal = els.goal.value.trim();
+    const message = els.message.value.trim();
+    const characters = els.characters.value.trim();
+    const brandColor = els.brandColor.value.trim();
+    const constraints = els.constraints.value.trim();
+    const negative = els.negative.value.trim();
+
+    els.presetPill.textContent = dict.purpose[purpose] || purpose;
+    els.modePill.textContent = `${dict.model[model]} • ${dict.style[style]}`;
+    els.modelDisplay.textContent = dict.model[model] || model;
+
+    const purposeGuideJa = {
+      thumbnail: "視認性最優先。タイトルは大きく、要素は少なく、強いコントラスト。重要ワードは2〜5語に絞る。",
+      diagram: "情報を階層化（見出し→要点→補足）。アイコン/図形/矢印で理解を補助。",
+      compare: "A/Bを左右または上下で対比。差分が一目でわかる構成。比較軸は2〜4個。",
+      beforeAfter: "BeforeとAfterを明確に分離し、変化点を強調。矢印やハイライトで改善を可視化。",
+      steps: "1→2→3の流れを番号・矢印で誘導。各ステップは短文＋アイコン。",
+      comic4: "4コマ構成（起承転結）。セリフは短く、表情で感情を伝える。",
+      banner: "横長想定。余白・視認性・CTAを意識。主メッセージ1本＋補助1本まで。",
+      icon: "シンプルで認識しやすい形状。細部より全体のシルエット重視。",
+      infographic: "データや情報を視覚的に整理。グラフ/チャート/アイコンを効果的に配置。",
+    };
+
+    const purposeGuideEn = {
+      thumbnail: "Prioritize visibility. Large title, minimal elements, strong contrast. Key words limited to 2-5.",
+      diagram: "Hierarchical information (headline→points→details). Use icons/shapes/arrows for clarity.",
+      compare: "A/B comparison side-by-side or top-bottom. Clear differentiation with 2-4 comparison axes.",
+      beforeAfter: "Clear separation of Before/After with emphasis on changes. Arrows/highlights to show improvement.",
+      steps: "Guide flow with numbers/arrows (1→2→3). Each step: short text + icon.",
+      comic4: "4-panel structure (setup→development→twist→conclusion). Short dialogue, expressive faces.",
+      banner: "Horizontal layout. Focus on whitespace, visibility, CTA. One main message + one supporting.",
+      icon: "Simple, recognizable shapes. Overall silhouette over fine details.",
+      infographic: "Visually organize data/information. Effective use of graphs/charts/icons.",
+    };
+
+    const layoutJa = {
+      top: "タイトルは上部に配置",
+      center: "タイトルは中央に大きく配置（最優先で目立たせる）",
+      bottom: "タイトルは下部に配置（主役の邪魔をしない）",
+      left: "タイトルは左側に配置（縦書きも可）",
+      right: "タイトルは右側に配置"
+    };
+
+    const layoutEn = {
+      top: "Title at top",
+      center: "Title centered and prominent",
+      bottom: "Title at bottom",
+      left: "Title on left side",
+      right: "Title on right side"
+    };
+
+    const coreBlockJa = [
+      title ? `【タイトル】${title}` : "【タイトル】（短く強いフレーズで）",
+      subtitle ? `【サブコピー】${subtitle}` : null,
+      audience ? `【ターゲット】${audience}` : null,
+      goal ? `【与えたい印象】${goal}` : null,
+      characters ? `【登場要素】${characters}` : null,
+      message ? `【要点】\n${message}` : "【要点】（箇条書きで記入推奨）",
+      constraints ? `【制約/NG】\n${constraints}` : null,
+      negative ? `【避けたい要素】${negative}` : null
+    ].filter(Boolean).join("\n\n");
+
+    const coreBlockEn = [
+      title ? `[Title] ${title}` : "[Title] (Strong, concise phrase)",
+      subtitle ? `[Subtitle] ${subtitle}` : null,
+      audience ? `[Target Audience] ${audience}` : null,
+      goal ? `[Desired Impression] ${goal}` : null,
+      characters ? `[Visual Elements] ${characters}` : null,
+      message ? `[Key Points]\n${message}` : "[Key Points] (Bullet points recommended)",
+      constraints ? `[Constraints]\n${constraints}` : null,
+      negative ? `[Negative Prompt] ${negative}` : null
+    ].filter(Boolean).join("\n\n");
+
+    let prompt = "";
+
+    if (language === "ja" || language === "both") {
+      prompt += `あなたは一流のビジュアルデザイナーです。
+以下の要件を満たす「${dict.purpose[purpose]}」の画像を生成してください。
+
+【仕様】
+- アスペクト比: ${ratio}
+- 画風: ${dict.style[style]}（強度: ${styleStrength}/10）
+- ${layoutJa[layout]}
+- 背景: ${dict.bg[bg]} / トーン: ${dict.tone[tone]}
+- 配色: ${dict.color[color]}${brandColor ? ` / ブランドカラー: ${brandColor}` : ''}
+- 文字量: ${dict.textAmount[textAmount]} / 仕上がり: ${dict.quality[quality]}
+
+【デザイン方針】
+${purposeGuideJa[purpose] || ''}
+- 文字は「読みやすさ」最優先。重要語は太く大きく。
+- 余白を確保し、要素を詰め込みすぎない。
+- 視線誘導（矢印/枠/番号/強調）を意識。
+- 日本語テキストは自然で誤字なく。
+
+【コンテンツ】
+${coreBlockJa}
+
+【生成のコツ】
+- 不足情報は文脈から自然に補完OK。
+- 主メッセージがブレないように。`;
+    }
+
+    if (language === "both") {
+      prompt += "\n\n---\n\n";
+    }
+
+    if (language === "en" || language === "both") {
+      prompt += `You are a world-class visual designer.
+Create a "${dict.purpose[purpose]}" image meeting these requirements:
+
+[Specifications]
+- Aspect Ratio: ${ratio}
+- Style: ${dict.style[style]} (Intensity: ${styleStrength}/10)
+- ${layoutEn[layout]}
+- Background: ${dict.bg[bg]} / Tone: ${dict.tone[tone]}
+- Color Scheme: ${dict.color[color]}${brandColor ? ` / Brand Color: ${brandColor}` : ''}
+- Text Amount: ${dict.textAmount[textAmount]} / Quality: ${dict.quality[quality]}
+
+[Design Guidelines]
+${purposeGuideEn[purpose] || ''}
+- Prioritize text readability. Important words bold and large.
+- Maintain whitespace, avoid clutter.
+- Use visual hierarchy (arrows/frames/numbers/emphasis).
+- Natural text without errors.
+
+[Content]
+${coreBlockEn}
+
+[Tips]
+- Fill in missing info naturally from context.
+- Keep the main message focused.`;
+    }
+
+    // Model-specific additions
+    if (model === "midjourney") {
+      prompt += `\n\n--ar ${ratio.replace(':', ':')} --v 6`;
+      if (negative) prompt += ` --no ${negative}`;
+    } else if (model === "sdxl" && negative) {
+      prompt += `\n\nNegative prompt: ${negative}, low quality, blurry, deformed`;
+    }
+
+    els.promptOut.textContent = prompt;
+    els.charCount.textContent = String(prompt.length);
+    recommendWarnings();
+  }
+
+  async function copyPrompt() {
+    const text = els.promptOut.textContent || "";
+    try {
+      await navigator.clipboard.writeText(text);
+      toast("📋 コピーしました！");
+    } catch(e) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      toast("📋 コピーしました！");
+    }
+  }
+
+  function downloadTxt() {
+    const text = els.promptOut.textContent || "";
+    const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `promptforge_${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast("💾 ファイルを保存しました");
+  }
+
+  function resetAll() {
+    localStorage.removeItem(STORAGE_KEY);
+    
+    els.model.value = "general";
+    els.language.value = "ja";
+    els.purpose.value = "thumbnail";
+    els.ratio.value = "16:9";
+    els.layout.value = "center";
+    els.style.value = "corporate";
+    els.styleStrength.value = "7";
+    els.styleStrengthValue.textContent = "7";
+    els.tone.value = "business";
+    els.bg.value = "white";
+    els.color.value = "brand";
+    els.textAmount.value = "short";
+    els.quality.value = "clean";
+
+    els.title.value = "";
+    els.subtitle.value = "";
+    els.audience.value = "";
+    els.goal.value = "";
+    els.message.value = "";
+    els.characters.value = "";
+    els.brandColor.value = "";
+    els.constraints.value = "";
+    els.negative.value = "";
+
+    updatePresetButtons();
+    buildPrompt();
+    toast("🗑️ リセットしました");
+  }
+
+  function randomFill() {
+    const samples = [
+      {
+        title: "3分でわかるGAS自動化",
+        subtitle: "初心者でも今日から使える！",
+        audience: "プログラミング初心者、業務効率化したい人",
+        goal: "簡単そう、すぐできそう、信頼感",
+        message: "・結論：テンプレをコピーするだけ\n・よくあるつまずきポイント3選\n・実践ステップ 1→2→3\n・次のアクション",
+        characters: "ノートPC、スプレッドシート、歯車アイコン、チェックマーク",
+        constraints: "・文字は大きく読みやすく\n・余白多め\n・明るい雰囲気で",
+        negative: "暗い色、複雑な背景、小さい文字"
+      },
+      {
+        title: "新人エンジニアの教科書",
+        subtitle: "現場で詰まらないための基礎知識",
+        audience: "新人/若手エンジニア",
+        goal: "親しみやすい、安心、実用的",
+        message: "・安全確認（感電/転倒防止）\n・確認手順（電源→配線→ログ）\n・報告の型（結論→状況→対応）\n・トラブル時のエスカレーション",
+        characters: "作業員、工具、サーバーラック、マニュアル",
+        constraints: "・親しみやすいイラストで\n・重要ワードは色で強調\n・余白確保",
+        negative: "暗い雰囲気、威圧的、複雑すぎる"
+      },
+      {
+        title: "Before / After で見る業務改善",
+        subtitle: "可視化で納得感200%",
+        audience: "管理職、現場リーダー",
+        goal: "説得力、データドリブン、改善効果",
+        message: "Before：属人的、手作業、ミス多発\nAfter：自動化、可視化、ミスゼロ\n効果：工数50%削減",
+        characters: "困り顔の人、笑顔の人、矢印、グラフ",
+        constraints: "・比較が一目でわかるレイアウト\n・数字で効果を示す\n・ビジネス感",
+        negative: "カジュアルすぎる、派手すぎる"
+      }
+    ];
+
+    const s = samples[Math.floor(Math.random() * samples.length)];
+    els.title.value = s.title;
+    els.subtitle.value = s.subtitle;
+    els.audience.value = s.audience;
+    els.goal.value = s.goal;
+    els.message.value = s.message;
+    els.characters.value = s.characters;
+    els.constraints.value = s.constraints;
+    els.negative.value = s.negative;
+
+    const styles = Object.keys(dict.style);
+    els.style.value = styles[Math.floor(Math.random() * styles.length)];
+    
+    const purposes = Object.keys(dict.purpose);
+    const randomPurpose = purposes[Math.floor(Math.random() * purposes.length)];
+    els.purpose.value = randomPurpose;
+
+    if (randomPurpose === "banner") els.ratio.value = "21:9";
+    else if (randomPurpose === "comic4" || randomPurpose === "icon") els.ratio.value = "1:1";
+    else if (randomPurpose === "steps" || randomPurpose === "infographic") els.ratio.value = "9:16";
+    else els.ratio.value = "16:9";
+
+    updatePresetButtons();
+    buildPrompt();
+    toast("🎲 サンプルで埋めました");
+  }
+
+  function shortenVibe() {
+    const compress = (txt) => {
+      const lines = txt.split("\n").map(l => l.trim()).filter(Boolean);
+      return lines.slice(0, 4).map(l => l.length > 35 ? l.slice(0, 35) + "…" : l).join("\n");
+    };
+
+    if (els.message.value.trim()) els.message.value = compress(els.message.value);
+    if (els.constraints.value.trim()) els.constraints.value = compress(els.constraints.value);
+    buildPrompt();
+    toast("✂️ 圧縮しました");
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("promptforge_theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+  }
+
+  function loadTheme() {
+    const theme = localStorage.getItem("promptforge_theme");
+    if (theme === "dark") {
+      document.body.classList.add("dark-mode");
+    }
+  }
+
+  function updatePresetButtons() {
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.preset === els.purpose.value);
+    });
+  }
+
+  // Event Listeners
+  const allInputs = [
+    els.model, els.language, els.purpose, els.ratio, els.layout, els.style, 
+    els.styleStrength, els.tone, els.bg, els.color, els.textAmount, els.quality,
+    els.title, els.subtitle, els.audience, els.goal, els.message, 
+    els.characters, els.brandColor, els.constraints, els.negative
+  ];
+
+  allInputs.forEach(el => {
+    if (el) {
+      el.addEventListener("input", () => { save(); buildPrompt(); });
+      el.addEventListener("change", () => { save(); buildPrompt(); updatePresetButtons(); });
+    }
+  });
+
+  els.styleStrength.addEventListener("input", () => {
+    els.styleStrengthValue.textContent = els.styleStrength.value;
+  });
+
+  els.btnCopy.addEventListener("click", copyPrompt);
+  els.btnCopyTop.addEventListener("click", copyPrompt);
+  els.btnDownload.addEventListener("click", downloadTxt);
+  els.btnReset.addEventListener("click", resetAll);
+  els.btnRandom.addEventListener("click", randomFill);
+  els.btnShorten.addEventListener("click", shortenVibe);
+  els.btnAddHistory.addEventListener("click", addToHistory);
+  els.themeToggle.addEventListener("click", toggleTheme);
+
+  // Preset buttons
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      els.purpose.value = btn.dataset.preset;
+      
+      // Auto-adjust ratio based on purpose
+      const ratioMap = {
+        thumbnail: "16:9",
+        diagram: "16:9",
+        compare: "16:9",
+        beforeAfter: "16:9",
+        steps: "9:16",
+        comic4: "1:1",
+        banner: "21:9",
+        icon: "1:1",
+        infographic: "9:16"
+      };
+      els.ratio.value = ratioMap[btn.dataset.preset] || "16:9";
+      
+      updatePresetButtons();
+      save();
+      buildPrompt();
+    });
+  });
+
+  // Keyboard shortcuts
+  window.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      copyPrompt();
+    }
+    if (e.key === "Escape") {
+      els.warnArea.textContent = "";
+      toast("表示をクリアしました");
+    }
+  });
+
+  // Initialize
+  loadTheme();
+  load();
+  loadHistory();
+  updatePresetButtons();
+  buildPrompt();
+})();
+</script>
+</body>
+</html>
