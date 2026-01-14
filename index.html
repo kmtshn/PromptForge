@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ナノバナナジェネレーター（雰囲気版）</title>
+  <title>PromptForge</title>
   <style>
     :root{
       --bg:#0b1020;
@@ -82,164 +82,166 @@
     .btn-danger{
       background: linear-gradient(135deg, rgba(239,68,68,.95), rgba(239,68,68,.55));
       border-color: rgba(239,68,68,.65);
-    }main{
-  max-width:1200px;
-  margin:0 auto;
-  padding: 8px 18px 28px;
-}
-.grid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:14px;
-}
-@media (max-width: 980px){
-  .grid{ grid-template-columns: 1fr; }
-}
-.card{
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow:hidden;
-}
-.card .hd{
-  padding:14px 14px 10px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.card .hd .ttl{
-  font-weight:800;
-  letter-spacing:.02em;
-  display:flex; align-items:center; gap:8px;
-}
-.pill{
-  font-size:12px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  color:var(--muted);
-  background:rgba(0,0,0,.15);
-  white-space:nowrap;
-}
-.card .bd{ padding:14px; }
+    }
+    main{
+      max-width:1200px;
+      margin:0 auto;
+      padding: 8px 18px 28px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card .hd .ttl{
+      font-weight:800;
+      letter-spacing:.02em;
+      display:flex; align-items:center; gap:8px;
+    }
+    .pill{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      background:rgba(0,0,0,.15);
+      white-space:nowrap;
+    }
+    .card .bd{ padding:14px; }
 
-.row{
-  display:grid;
-  grid-template-columns: 160px 1fr;
-  gap:10px;
-  align-items:center;
-  margin-bottom:10px;
-}
-@media (max-width: 560px){
-  .row{ grid-template-columns: 1fr; }
-}
-label{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.2;
-}
-select, input[type="text"], textarea{
-  width:100%;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: rgba(0,0,0,.20);
-  color: var(--text);
-  padding: 10px 12px;
-  outline: none;
-  transition: .15s border, .15s background;
-}
-textarea{ min-height: 90px; resize: vertical; }
-select:focus, input:focus, textarea:focus{
-  border-color: rgba(124,92,255,.7);
-  background: rgba(0,0,0,.28);
-}
-.two{
-  display:grid; grid-template-columns: 1fr 1fr; gap:10px;
-}
-@media (max-width: 560px){ .two{ grid-template-columns: 1fr; } }
+    .row{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap:10px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    @media (max-width: 560px){
+      .row{ grid-template-columns: 1fr; }
+    }
+    label{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.2;
+    }
+    select, input[type="text"], textarea{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      color: var(--text);
+      padding: 10px 12px;
+      outline: none;
+      transition: .15s border, .15s background;
+    }
+    textarea{ min-height: 90px; resize: vertical; }
+    select:focus, input:focus, textarea:focus{
+      border-color: rgba(124,92,255,.7);
+      background: rgba(0,0,0,.28);
+    }
+    .two{
+      display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+    }
+    @media (max-width: 560px){ .two{ grid-template-columns: 1fr; } }
 
-.hint{
-  margin-top:6px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.55;
-}
-.divider{
-  margin:12px 0;
-  height:1px;
-  background: var(--line);
-}
-.prompt{
-  font-family: var(--mono);
-  font-size: 12.8px;
-  line-height: 1.65;
-  white-space: pre-wrap;
-  word-break: break-word;
-  background: rgba(0,0,0,.22);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px;
-  min-height: 280px;
-}
-.mini-actions{
-  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-}
-.status{
-  color:var(--muted);
-  font-size:12px;
-  display:flex; gap:10px; flex-wrap:wrap;
-  align-items:center;
-}
-.toast{
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 18px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: rgba(0,0,0,.55);
-  box-shadow: var(--shadow);
-  opacity: 0;
-  pointer-events:none;
-  transition: .18s opacity, .18s transform;
-  color: var(--text);
-  font-weight:700;
-}
-.toast.show{
-  opacity: 1;
-  transform: translateX(-50%) translateY(-2px);
-}
-.tag{
-  display:inline-block;
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.06);
-  color: var(--muted);
-  font-size: 12px;
-  margin: 0 6px 6px 0;
-}
-.footer{
-  max-width:1200px;
-  margin: 14px auto 0;
-  padding: 0 18px 22px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.6;
-}
-.kbd{
-  font-family: var(--mono);
-  border: 1px solid var(--line);
-  padding: 2px 6px;
-  border-radius: 8px;
-  background: rgba(0,0,0,.22);
-  color: var(--text);
-  font-size: 11px;
-}
+    .hint{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.55;
+    }
+    .divider{
+      margin:12px 0;
+      height:1px;
+      background: var(--line);
+    }
+    .prompt{
+      font-family: var(--mono);
+      font-size: 12.8px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: rgba(0,0,0,.22);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 280px;
+    }
+    .mini-actions{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .status{
+      color:var(--muted);
+      font-size:12px;
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.55);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events:none;
+      transition: .18s opacity, .18s transform;
+      color: var(--text);
+      font-weight:700;
+      z-index: 1000;
+    }
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+    .tag{
+      display:inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 6px 6px 0;
+    }
+    .footer{
+      max-width:1200px;
+      margin: 14px auto 0;
+      padding: 0 18px 22px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .kbd{
+      font-family: var(--mono);
+      border: 1px solid var(--line);
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      font-size: 11px;
+    }
 
   </style>
 </head>
@@ -578,10 +580,10 @@ select:focus, input:focus, textarea:focus{
 
     if(warns.length){
       els.warnArea.innerHTML = `⚠️ ${warns.join(" / ")}`;
-      els.warnArea.style.color = "rgba(245,158,11,.95)";
+      els.warnArea.style.color = "var(--warn)";
     }else{
       els.warnArea.textContent = "✅ 入力OK";
-      els.warnArea.style.color = "rgba(34,197,94,.9)";
+      els.warnArea.style.color = "var(--accent2)";
     }
   }
 
@@ -596,11 +598,11 @@ select:focus, input:focus, textarea:focus{
     const textAmount = els.textAmount.value;
     const quality = els.quality.value;
 
-    const title = els.title.value.trim();
+    const title = els.title.value.trim() || "(タイトル未定)";
     const subtitle = els.subtitle.value.trim();
-    const audience = els.audience.value.trim();
-    const goal = els.goal.value.trim();
-    const message = els.message.value.trim();
+    const audience = els.audience.value.trim() || "一般";
+    const goal = els.goal.value.trim() || "情報を分かりやすく伝える";
+    const message = els.message.value.trim() || "(メッセージ未定)";
     const characters = els.characters.value.trim();
     const brandColor = els.brandColor.value.trim();
     const constraints = els.constraints.value.trim();
@@ -663,4 +665,165 @@ select:focus, input:focus, textarea:focus{
     })();
 
     const colorLine = (() => {
-      let s = `配色は「${dict.color[co
+        let s = `配色は「${dict.color[color]}」基調。`;
+        if(brandColor) s += ` ブランドカラー（${brandColor}）をアクセントに使用。`;
+        return s;
+    })();
+
+    const finalPrompt = `
+# 画像生成プロンプト指示書
+
+## ① 制作の目的・形式
+- **種類**: ${dict.purpose[purpose]}
+- **アスペクト比**: ${ratio}
+- **基本方針**:
+${purposeGuide}
+
+## ② デザインコア（内容）
+- **タイトル**: ${title}
+${subtitle ? `- **サブコピー**: ${subtitle}` : ""}
+- **ターゲット**: ${audience}
+- **狙う印象**: ${goal}
+- **主な内容/メッセージ**:
+${message}
+${characters ? `- **登場人物/要素**: ${characters}` : ""}
+
+## ③ デザインテイスト（見た目）
+- **画風**: ${dict.style[style]}
+- **トーン**: ${dict.tone[tone]}
+- **背景**: ${dict.bg[bg]}
+- **配色**: ${colorLine}
+- **文字量**: ${dict.textAmount[textAmount]}
+- **品質**: ${dict.quality[quality]}
+- **レイアウト**: ${titlePos}
+
+${constraints ? `## ④ 制約・NG事項\n${constraints}` : ""}
+
+## ⑤ AIへの指示
+上記の内容を踏まえ、視認性が高く、プロフェッショナルなデザインの画像を生成してください。
+文字（特に日本語）が含まれる場合は、可能な限り正確に、あるいは後から編集しやすい配置で描写してください。
+`.trim();
+
+    els.promptOut.textContent = finalPrompt;
+    
+    // 文字数カウント (タイトル+要点+制約)
+    const count = title.length + message.length + (constraints ? constraints.length : 0);
+    els.charCount.textContent = count;
+  }
+
+  // --- Actions ---
+
+  function copyToClipboard(){
+    const text = els.promptOut.textContent;
+    if(!text) return;
+    
+    // iframe内でのクリップボード対応
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try{
+        document.execCommand('copy');
+        toast("コピーしました！");
+    } catch(err){
+        toast("コピーに失敗しました");
+    }
+    document.body.removeChild(ta);
+  }
+
+  function resetAll(){
+    if(!confirm("本当に入力をリセットしますか？")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    // デフォルト値に戻す（簡易的リロード）
+    location.reload();
+  }
+
+  function randomFill(){
+    // 選択肢をランダムに
+    const selects = document.querySelectorAll("select");
+    selects.forEach(sel => {
+      const opts = sel.options;
+      sel.selectedIndex = Math.floor(Math.random() * opts.length);
+    });
+    
+    // 入力が空ならサンプルを入れる（オプショナル）
+    if(!els.title.value) els.title.value = "AI時代の生存戦略";
+    if(!els.audience.value) els.audience.value = "20代〜30代のビジネスパーソン";
+    if(!els.goal.value) els.goal.value = "危機感を持たせつつ、希望も見せる";
+    if(!els.message.value) els.message.value = "・AIは道具である\n・使う側になれば怖くない\n・まずは触ってみよう";
+
+    toast("🎲 ランダムに設定しました");
+    buildPrompt();
+    save();
+    recommendWarnings();
+  }
+  
+  function downloadTxt(){
+      const text = els.promptOut.textContent;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `prompt_${new Date().toISOString().slice(0,10)}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toast("ダウンロードを開始しました");
+  }
+
+  function shortenText(){
+      // 簡易的な「短縮」シミュレーション
+      if(els.message.value.length > 10){
+          toast("🪄 雰囲気を残して短縮しました（シミュレーション）");
+          // 実際には要約APIが必要だが、ここでは改行を整理する程度
+          const lines = els.message.value.split('\n').filter(l => l.trim().length > 0);
+          els.message.value = lines.join('\n');
+          buildPrompt();
+      } else {
+          toast("これ以上短くできません");
+      }
+  }
+
+  // --- Init ---
+
+  // Event Listeners
+  [els.btnCopy, els.btnCopyTop].forEach(btn => btn.addEventListener("click", copyToClipboard));
+  els.btnReset.addEventListener("click", resetAll);
+  els.btnRandom.addEventListener("click", randomFill);
+  els.btnDownload.addEventListener("click", downloadTxt);
+  els.btnShorten.addEventListener("click", shortenText);
+
+  // Inputs
+  const inputEvents = ["input", "change"];
+  Object.values(els).forEach(el => {
+    if(el && (el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA")){
+      inputEvents.forEach(evt => {
+        el.addEventListener(evt, () => {
+          buildPrompt();
+          save();
+          recommendWarnings();
+        });
+      });
+    }
+  });
+
+  // Shortcut keys
+  document.addEventListener("keydown", (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
+      e.preventDefault();
+      copyToClipboard();
+    }
+    if(e.key === "Escape"){
+      els.warnArea.innerHTML = "";
+    }
+  });
+
+  // Start
+  load();
+  buildPrompt();
+  recommendWarnings();
+
+})();
+</script>
+</body>
+</html>
